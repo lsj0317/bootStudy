@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.zerock.board.entity.Memo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -192,6 +193,39 @@ public class MemoRepositorytests {
             //Memo(mno=9, memoText=Sample....9)
             //Memo(mno=10, memoText=Sample....10)
         }
+
+    }
+
+    @Test
+    public void testQueryMethods() {
+
+        List<Memo> list = memoRepository.findByMnoBetweenOrderByMnoDesc(70L, 80L);
+        // memoRepository에 있는 쿼리메서드를 실행하여 리스트 객체로 받음
+        for(Memo memo : list) {
+            System.out.println(memo);
+        } // 받은 리스트 객체를 for문을 이용하여 콘솔에 출력
+
+    }
+
+    @Test
+    public void testQueryMethodWithPage() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").descending());
+        // 페이지 타입은 of를 이용해서 요청을 처리함, 0번의 10개를 mno를 기준으로 내림차순 정렬을 매개값으로 전달 (공식처럼 생각해라)
+
+        Page<Memo> result = memoRepository.findByMnoBetween(10L, 50L, pageable);
+
+        result.get().forEach(memo -> System.out.println(memo));
+
+    }
+
+    @Transactional // delete에서는 두 개의 쿼리문이 동작해야 한다 -> Transactional 처리 
+    @Commit // delete에서는 autoCommit이 안됨 -> Commit처리
+    @Test
+    public void  testdeleteQueryMethods() {
+        // 쿼리 메서드로 delete처리를 하면 9번의 쿼리문이 전달된다 -> 비효율적임
+        // 이 경우에는 @Query를 붙여서 처리해야 한다.
+        memoRepository.deleteMemoByMnoLessThan(10L);
 
     }
 
