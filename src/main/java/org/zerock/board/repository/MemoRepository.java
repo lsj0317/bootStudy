@@ -41,12 +41,12 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
     List<Memo> getListDesc(); // 내가 만든 메서드 명 위의 @Query(쿼리문)를 붙여서 메서드를 만든다.
 
     // 매개값이 있는 @Query문 : 값 (타입으로 받는 방법)
-    @Query("UPDATE Memo m SET m.memoText = :momotext WHERE m.mno = :mno")
-    int updateMemoText(@Param("mno") Long mno, @Param("memoText") String memotext);
+    @Query("UPDATE Memo m SET m.memoText = :memoText WHERE m.mno = :mno")
+    int updateMemoText(@Param("mno") Long mno, @Param("memoText") String memoText);
 
     // 매개값이 객체(빈)으로 들어올 경우
-    @Query("UPDATE Memo m SET m.memoText = :#{memoBean.memoText} WHERE m.mno = :#{memoBean.mno}")
-    int updateMemoBean(@Param("memoBean") Memo memo);
+//    @Query("UPDATE Memo m SET m.memoText = :#{memoBean.memoText} WHERE m.mno = :#{memoBean.mno}")
+//    int updateMemoBean(@Param("memoBean") Memo memo);
 
     // @Query 메서드로 페이징 처리 해보기 -> 리턴 타입이 Page<Memo>
     @Query(value = "SELECT m FROM Memo m WHERE m.mno > :mno",
