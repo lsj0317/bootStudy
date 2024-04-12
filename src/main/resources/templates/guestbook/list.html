@@ -3,6 +3,99 @@
 
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1>방명록 리스트 페이지 (페이징, 다중검색)</h1>
+        <div class="row">
+            <div class="col-9 d-flex justift-content-center align-items-center">
+                <h3 class="mt-4">방명록 리스트 페이지 (페이징, 다중검색)</h3>
+            </div>
+            <div class="col-3 d-flex justift-content-center align-items-center">
+                <span>
+                    <a th:href="@{/guestbook/register}">
+                        <button type="button" class="btn btn-outline-primary">
+                            게시물작성
+                        </button>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">번호</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="dto: ${result.dtoList}">
+                    <th scope="row">
+                        <a th:href="@{/guestbook/read(gno = ${dto.gno}, page = ${result.page})}">
+                            [[${dto.gno}]]
+                        </a>
+                    </th>
+                    <td>[[${dto.title}]]</td>
+                    <td>[[${dto.writer}]]</td>
+                    <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 추가되는 태그 시작 -->
+        <ul class="pagination h-100 justify-content-center align-items-center">
+
+            <li class="page-item " th:if = "${result.prev}">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+
+            <li th:class=" 'page-item ' + ${result.page == page ? 'active' : '' } "
+            th:each="page: ${result.pageList}" >
+                <a th:class="page-link" th:href="@{/guestbook/list(page = ${page})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{/guestbook/list(page = ${result.end + 1})}">Next</a>
+            </li>
+
+        </ul>
+        <!-- 추가되는 태그 끝 -->
+
+        <!-- 글작성 완료 여부 모달 시작 -->
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss = "modal" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>작성이 완료되었습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                        <button type="button" class="btn btn-primary">SaveChanges</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 글작성 완료 여부 모달 종료 -->
+
     </th:block>
 </th:block>
+
+
+
+<script th:inline="javascript">
+
+        const msg = [[${msg}]];
+        console.log("완료 되었니? : " + msg);
+
+        if(msg) {
+            $(".modal").modal();
+        }
+
+</script>

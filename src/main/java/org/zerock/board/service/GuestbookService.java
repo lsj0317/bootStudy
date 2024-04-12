@@ -8,7 +8,12 @@ import org.zerock.board.dto.PageResultDTO;
 import org.zerock.board.entity.Guestbook;
 
 public interface GuestbookService {
+
+    // 게시글 작성
     Long register(GuestbookDTO dto);
+
+    // 게시글 조회처리
+    GuestbookDTO read(Long gno);
 
     PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO pageRequestDTO);
 
