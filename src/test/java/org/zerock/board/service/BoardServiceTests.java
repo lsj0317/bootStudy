@@ -51,4 +51,25 @@ public class BoardServiceTests {
 
         System.out.println(boardDTO);
     }
+
+    @Test
+    public void testRemove() {
+        Long bno = 10L;
+
+        boardService.removeWithReplies(bno);
+
+    }
+
+    @Test
+    public void testModify() {
+
+        BoardDTO boardDTO = BoardDTO.builder()
+                .bno(30L)
+                .title("변경된제목 30번")
+                .content("변경된 내용 30번")
+                .build();
+
+        boardService.modify(boardDTO);
+    }
+
 }

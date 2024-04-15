@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.zerock.board.entity.Board;
 import org.zerock.board.entity.Member;
+import org.zerock.board.entity.Reply;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,9 @@ public class BoardRepositoryTests {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Test
     public void insertBoard() {
@@ -97,6 +101,41 @@ public class BoardRepositoryTests {
 
         System.out.println(Arrays.toString(arr));
 
+    }
+
+    @Test
+    public void testSearch1() {
+
+        boardRepository.search1();
+
+    }
+
+    @Test
+    public void testSearchPage() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
+        Page<Object[]> result = boardRepository.searchPage("t", "1", pageable);
+
+    }
+
+    @Test
+    public void resrSearchPage() {
+
+        Pageable pageable =
+                PageRequest.of(0, 10, Sort.by("bno").descending()
+                        .and(Sort.by("title").ascending()));
+
+        Page<Object[]> result = boardRepository.searchPage("t", "1", pageable);
+    }
+
+    @Test
+    public void testListByBoard() {
+
+        List<Reply> replyList = replyRepository.getRepliesByBoardOrderByRno(
+          Board.builder().bno(97L).build());
+
+        replyList.forEach(reply -> System.out.println(reply));
     }
 
 }

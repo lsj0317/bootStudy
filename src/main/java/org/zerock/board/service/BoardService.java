@@ -8,11 +8,15 @@ import org.zerock.board.entity.Member;
 
 public interface BoardService {
 
-    Long register(BoardDTO dto); // 게시물 작성
+    Long register(BoardDTO dto); // 게시물 작성 기능
 
-    PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO); // 목록처리
+    PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO); // 게시물 목록처리 기능
 
-    BoardDTO get(Long bno); // 한개의 게시물 조회
+    BoardDTO get(Long bno); // 한개의 게시물 조회 기능
+
+    void removeWithReplies(Long bno); // 게시물 삭제 기능
+
+    void modify(BoardDTO boardDTO); // 게시물 수정 기능
 
     default Board dtoToEntity(BoardDTO dto) {
         Member member = Member.builder().email(dto.getWriterEmail()).build();

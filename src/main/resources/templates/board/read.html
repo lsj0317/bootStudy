@@ -13,10 +13,9 @@
       <hr>
       <div class="row">
         <div class="col-12">
-          <form th:action="@{/guestbook/register}" th:method="post">
             <div class="form-group">
               <label>번호</label>
-              <input type="text" class="form-control" name="gno" th:value="${dto.gno}" readonly>
+              <input type="text" class="form-control" name="gno" th:value="${dto.bno}" readonly>
             </div>
             <div class="form-group">
               <label>제목</label>
@@ -28,7 +27,7 @@
             </div>
             <div class="form-group">
               <label>작성자</label>
-              <input type="text" class="form-control" name="writer" th:value="${dto.writer}" readonly>
+              <input type="text" class="form-control" name="writer" th:value="${dto.writerName}" readonly>
             </div>
             <div class="form-group">
               <label>작성일</label>
@@ -40,29 +39,19 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <a th:href="@{/guestbook/modify(gno = ${dto.gno}, page = ${requestDTO.page},
-                type = ${requestDTO.type},
-                keyword = ${requestDTO.keyword})}">
+                <a th:href="@{/board/modify(bno = ${dto.bno}, page = ${requestDTO.page},
+                type = ${requestDTO.type}, keyword = ${requestDTO.keyword})}">
                   <button type="button" class="btn btn-success w-100">수정하기</button>
                 </a>
               </div>
               <div class="col-6">
-                <a th:href="@{/guestbook/list(page = ${requestDTO.page},
+                <a th:href="@{/board/list(page = ${requestDTO.page},
                 type = ${requestDTO.type},
                 keyword = ${requestDTO.keyword})}">
                   <button type="button" class="btn btn-secondary w-100">리스트로</button>
                 </a>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <a th:href="@{/board/list(page=${requestDTO.page},
-                                          type=$)}">
-
-                </a>
-              </div>
-            </div>
-          </form>
         </div>
       </div>
     </div>

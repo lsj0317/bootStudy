@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex justift-content-center align-items-center">
+                    <h3 class="mt-4">게시물 수정 페이지</h3>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <!-- 추가된 form 태그 -->
+                    <form action="/board/modify" th:method="post">
+
+                        <!-- 페이지 번호 -->
+                        <input type="hidden" name="page" th:value="${requestDTO.page}" />
+                        <input type="hidden" name="type" th:value="${requestDTO.type}" />
+                        <input type="hidden" name="keyword" th:value="${requestDTO.keyword}" />
+
+                        <div class="form-group">
+                            <label>번호</label>
+                            <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label>제목</label>
+                            <input type="text" class="form-control" name="title" th:value="${dto.title}"/>
+                        </div>
+                        <div class="form-group">
+                            <label>내용</label>
+                            <textarea type="text" class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>작성자</label>
+                            <input type="text" class="form-control" name="writer" th:value="${dto.writerName}" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label>작성일</label>
+                            <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label>수정일</label>
+                            <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly/>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="button" class="btn btn-success modifyBtn w-100">수정하기</button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-secondary w-100 listBtn">리스트로</button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-danger removeBtn w-100">게시물삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+
+</th:block>
+
+<script th:inline="javascript">
+
+    // 수정할 제목, 내용, 작성자, 작성일, 수정일이 담긴 폼 변수에 저장
+    let actionForm = $("form");
+
+    // 이벤트 등록
+    $(".removeBtn").on("click", remove); // 삭제 버튼 클릭 이벤트
+    $(".modifyBtn").on("click", modify); // 수정 버튼 클릭 이벤트
+    $(".listBtn").on("click", goList);   // 목록으로 이동 버튼 클릭 이벤트
+
+
+    // 게시물 삭제
+    function remove() {
+        actionForm.attr("action", "/board/remove").attr("method", "post");
+        actionForm.submit();
+    }
+
+    // 게시물 수정
+    function modify() {
+        if(!confirm("게시물을 수정하시겠습니까?")) {
+            return;
+        }
+
+        actionForm.attr("action", "/guestbook/modify").attr("method", "post")
+            .submit();
+    }
+
+    // 목록 페이지로 이동
+    function goList() {
+        const page = $("input[name = 'page']");
+        const type = $("input[name = 'type']");
+        const keyword = $("input[name = 'keyword']");
+
+        actionForm.empty(); // form태그의 모든 내용을 지우고
+
+        actionForm.append(page);
+        actionForm.append(type);
+        actionForm.append(keyword);
+
+        actionForm.attr("action", "/guestbook/list")
+            .attr("method", "get");
+
+        // console.log(actionForm.html()); // 먼저 확인 후 주석처리
+        actionForm.submit(); // 확인 후 주석 해제
+    }
+
+    // $(".removeBtn").on("click", function() {
+    //
+    //     actionForm.attr("action", "/board/remove").attr("method", "post");
+    //     actionForm.submit();
+    //
+    // });
+
+    // $(".modifyBtn").on("click", function() {
+    //
+    //     if(!confirm("게시물을 수정하시겠습니까?")) {
+    //         return;
+    //     }
+    //
+    //     actionForm.attr("action", "/guestbook/modify").attr("method", "post")
+    //         .submit();
+    //
+    // });
+
+    // $(".listBtn").on("click", function() {
+    //
+    //
+    //     // const pageInfo = $("input[name = 'page']");
+    //     const page = $("input[name = 'page']");
+    //     const type = $("input[name = 'type']");
+    //     const keyword = $("input[name = 'keyword']");
+    //
+    //     actionForm.empty(); // form태그의 모든 내용을 지우고
+    //
+    //     actionForm.append(page);
+    //     actionForm.append(type);
+    //     actionForm.append(keyword);
+    //
+    //     actionForm.attr("action", "/guestbook/list")
+    //         .attr("method", "get");
+    //
+    //     // console.log(actionForm.html()); // 먼저 확인 후 주석처리
+    //     actionForm.submit(); // 확인 후 주석 해제
+    //
+    // });
+
+</script>
